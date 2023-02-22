@@ -21,8 +21,7 @@ class Product extends HiveObject {
   @HiveField(4)
   DateTime dateAdded;
 
-  @HiveField(5)
-  List<History> history;
+ 
 
   Product({
     required this.name,
@@ -30,7 +29,7 @@ class Product extends HiveObject {
     required this.numIndividualPieces,
     required this.category,
     required this.dateAdded,
-    required this.history,
+   
   });
 }
 

@@ -6,14 +6,17 @@ part 'history.g.dart';
 @HiveType(typeId: 1)
 class History extends HiveObject {
   @HiveField(0)
-  Product productId;
+  Product product;
 
   @HiveField(1)
   int quantity;
 
+  @HiveField(2)
+  String boxOrIndiv;
 
   @HiveField(3)
   DateTime dateTime;
 
-  History({required this.productId, required this.quantity, required this.dateTime});
+  History(
+      {required this.product, required this.quantity, required this.dateTime,required this.boxOrIndiv});
 }

@@ -5,6 +5,7 @@ import 'package:stock_manager/database/product.dart';
 class ProductManager {
   Box<Product> _productBox = Hive.box<Product>('products');
   Box<Category> _categoryBox = Hive.box<Category>('categories');
+  Box<History> _historyBox=Hive.box<History>('historys')
 
   List<Product> get allProducts => _productBox.values.toList();
 
@@ -38,8 +39,8 @@ class ProductManager {
   void addPieces(Product product, int numPieces) {
     product.numIndividualPieces += numPieces;
     History history =
-        History(action: 'Added $numPieces pieces', date: DateTime.now());
-    product.history.add(history);
+        History(product: product,quantity: numPieces,dateTime:DateTime.now(),boxOrIndiv: "قطع" );
+    _historyBox.add(history);
     product.save();
   }
 
