@@ -1,17 +1,32 @@
 import 'package:hive/hive.dart';
 
-part 'category.g.dart';
-
-@HiveType(typeId: 1)
-class Category extends HiveObject {
-  @HiveField(0)
+class Category {
+  int? id;
   String name;
 
-  @HiveField(1)
-  String colorHexCode;
+  String color;
 
   Category({
+    this.id,
     required this.name,
-    required this.colorHexCode,
+    required this.color,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'color': color,
+      
+    };
+  }
+
+  factory Category.fromMap(Map<String, dynamic> map) {
+    return Category(
+      id: map['id'],
+      name: map['name'],
+      color: map['color'],
+     
+    );
+  }
 }
