@@ -4,19 +4,19 @@ class Category {
   int? id;
   String name;
 
-  String color;
+ 
 
   Category({
     this.id,
     required this.name,
-    required this.color,
+   
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'color': color,
+      
       
     };
   }
@@ -25,7 +25,7 @@ class Category {
     return Category(
       id: map['id'],
       name: map['name'],
-      color: map['color'],
+      
      
     );
   }

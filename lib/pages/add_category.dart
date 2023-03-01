@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stock_manager/components/drawer.dart';
 import 'package:stock_manager/controller/product_controller.dart';
 import 'package:stock_manager/database/category.dart';
 import 'package:stock_manager/styles/colors.dart';
@@ -18,6 +19,7 @@ class AddCategoryPage extends StatelessWidget {
     
 
     return Scaffold(
+      drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Add Category'),
       ),
@@ -47,7 +49,7 @@ class AddCategoryPage extends StatelessWidget {
                   if (_formKey.currentState!.validate()) {
                     final newCategory = Category(
                       name: _nameController.text,
-                      color: getRandomColor(),
+                     
                     );
                     categoryController.addCategory(newCategory);
                     Get.back();

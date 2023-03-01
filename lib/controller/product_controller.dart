@@ -8,7 +8,9 @@ class ProductController extends GetxController {
   final dbHelper = DBHelper();
   bool isLoading = true;
   List<Product> products = [];
-
+  Product? selectedProduct;
+  int boxsConter = 0;
+  int piecesConter = 0;
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController piecesPerBoxController = TextEditingController();
@@ -22,36 +24,58 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadProducts();
+    loadCategories();
   }
 
-  void addProduct() {
+  void addProduct() async {
     Product product = Product(
-        category: selectedCategory!,
+        categoryId: selectedCategory!.id!,
         name: nameController.text,
         dateAdded: DateTime.now(),
         numIndividualPieces: 0,
         numPiecesPerBox: int.parse(piecesPerBoxController.text));
-    dbHelper.insertProduct(product);
+    await dbHelper.insertProduct(product);
+    nameController.clear();
+    selectedCategory = null;
+    piecesPerBoxController.clear();
+  }
+
+  void updateProduct() async {
+    Product product = selectedProduct!;
+    product.numIndividualPieces += boxsConter * product.numPiecesPerBox;
+    product.numIndividualPieces += piecesConter;
+    await dbHelper.updateProduct(product);
+    boxsConter = 0;
+    piecesConter = 0;
+    loadProducts();
+
+    loadCategoryProducts();
   }
 
   void loadProducts() async {
     isLoading = true;
     products = await dbHelper.getAllProducts();
     isLoading = false;
+    update();
   }
 
-  void deleteProduct(int productId) async {
-    await dbHelper.deleteProduct(productId);
+  void deleteProduct() async {
+    await dbHelper.deleteProduct(selectedProduct!.id!);
+    loadProducts();
+    loadCategoryProducts();
   }
 
 // category
 
   Category? selectedCategory;
+  Category? productCategory;
+  List<Product> categoryProducts = [];
   List<Category> categories = [];
 
   void loadCategories() async {
+    isLoading = true;
     categories = await dbHelper.getAllCategories();
+    isLoading = false;
     update();
   }
 
@@ -65,8 +89,23 @@ class ProductController extends GetxController {
     loadCategories();
   }
 
-  Future<void> deleteCategory(Category category) async {
-    await dbHelper.deleteCategory(category.id!);
+  Future<void> deleteCategory() async {
+    await dbHelper.deleteCategory(selectedCategory!.id!);
+    selectedCategory = null;
     loadCategories();
+  }
+
+  void loadCategoryProducts() async {
+    if (selectedCategory == null) {
+    } else {
+      categoryProducts =
+          await dbHelper.getProductsByCategoryId(selectedCategory!.id!);
+    }
+
+    update();
+  }
+
+  void getCategoryById() async {
+    productCategory = await dbHelper.getCategoryById(selectedProduct!.categoryId);
   }
 }

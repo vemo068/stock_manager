@@ -36,7 +36,7 @@ class DBHelper {
           pieces_per_box INTEGER,
           individual_pieces INTEGER,
           category_id INTEGER,
-          date_added TEXT
+          date_added TEXT,
           FOREIGN KEY (category_id) REFERENCES categories(id)
         )
       ''');
@@ -61,7 +61,6 @@ class DBHelper {
       ''');
   }
 
-
 //Products
 
   Future<int> insertProduct(Product product) async {
@@ -79,14 +78,15 @@ class DBHelper {
       },
     );
   }
+
   Future<List<Product>> searchProducts(String searchText) async {
-  final db = await database;
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-      "SELECT * FROM products WHERE name LIKE '%$searchText%'");
-  return List.generate(maps.length, (i) {
-    return Product.fromMap(maps[i]);
-  });
-}
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db
+        .rawQuery("SELECT * FROM products WHERE name LIKE '%$searchText%'");
+    return List.generate(maps.length, (i) {
+      return Product.fromMap(maps[i]);
+    });
+  }
 
   Future<int> updateProduct(Product product) async {
     final Database db = await _instance.database;
@@ -107,9 +107,19 @@ class DBHelper {
     );
   }
 
+  Future<List<Product>> getProductsByCategoryId(int categoryId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db
+        .rawQuery('SELECT * FROM products WHERE category_id = ?', [categoryId]);
+
+    return List.generate(maps.length, (i) {
+      return Product.fromMap(maps[i]);
+    });
+  }
+
 // Category
 
- Future<int> insertCategory(Category category) async {
+  Future<int> insertCategory(Category category) async {
     final Database db = await _instance.database;
     return await db.insert('categories', category.toMap());
   }
@@ -134,19 +144,38 @@ class DBHelper {
       whereArgs: [category.id],
     );
   }
-Future<int> deleteCategory(int id) async {
+
+  Future<int> deleteCategory(int id) async {
     final Database db = await _instance.database;
+    await deleteProductsByCategoryId(id);
     return await db.delete(
-      'category',
+      'categories',
       where: 'id = ?',
       whereArgs: [id],
     );
   }
 
+  Future<void> deleteProductsByCategoryId(int categoryId) async {
+    final db = await _instance.database;
+
+    await db.delete(
+      'products',
+      where: 'category_id = ?',
+      whereArgs: [categoryId],
+    );
+  }
+
+  Future<Category> getCategoryById(int id) async {
+    final db = await database;
+    List<Map<String, dynamic>> result =
+        await db.query('categories', where: "id = ?", whereArgs: [id]);
+
+    return Category.fromMap(result.first);
+  }
 
 // History
 
- // create
+  // create
   Future<int> createHistory(History history) async {
     final db = await database;
     return await db.insert('history', history.toMap());
@@ -202,7 +231,4 @@ Future<int> deleteCategory(int id) async {
       whereArgs: [productId],
     );
   }
-
-  
 }
-

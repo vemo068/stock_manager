@@ -10,7 +10,7 @@ class Product {
 
   int numIndividualPieces;
 
-  Category category;
+  int categoryId;
 
   DateTime dateAdded;
 
@@ -19,7 +19,7 @@ class Product {
     required this.name,
     required this.numPiecesPerBox,
     required this.numIndividualPieces,
-    required this.category,
+    required this.categoryId,
     required this.dateAdded,
   });
 
@@ -27,22 +27,20 @@ class Product {
     return {
       'id': id,
       'name': name,
-      'numPiecesPerBox': numPiecesPerBox,
-      'numIndividualPieces': numIndividualPieces,
-      'category': category,
-     'date_added':dateAdded.toString()
+      'pieces_per_box': numPiecesPerBox,
+      'individual_pieces': numIndividualPieces,
+      'category_id': categoryId,
+      'date_added': dateAdded.toString()
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'],
-      name: map['name'],
-      numPiecesPerBox: map['numPiecesPerBox'],
-      numIndividualPieces: map['numIndividualPieces'],
-      category: map['category'],
-      dateAdded:DateTime.parse(map['date_added'])
-      
-    );
+        id: map['id'],
+        name: map['name'],
+        numPiecesPerBox: map['pieces_per_box'],
+        numIndividualPieces: map['individual_pieces'],
+        categoryId: map['category_id'],
+        dateAdded: DateTime.parse(map['date_added']));
   }
 }
