@@ -13,19 +13,35 @@ class CategoryProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Get.to(AddProductPage());
-          },
-          child: Icon(Icons.add),
-        ),
+        onPressed: () {
+          Get.to(AddProductPage());
+        },
+        child: Icon(Icons.add),
+      ),
       // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('${productController.selectedCategory!.name}'),
         actions: [
           IconButton(
               onPressed: () {
-                productController.deleteCategory();
-                Get.back();
+                Get.defaultDialog(
+                  title: "Delete Category",
+                  content: Text("delete this Category with products?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        productController.deleteCategory();
+                        Get.back();
+                        Get.back();
+                      },
+                      child: Text("Delete"),
+                    ),
+                  ],
+                );
               },
               icon: Icon(Icons.delete)),
         ],

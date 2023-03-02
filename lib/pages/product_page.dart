@@ -39,8 +39,24 @@ class ProductPage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  productController.deleteProduct();
-                  Get.back();
+                  Get.defaultDialog(
+                    title: "Delete Product",
+                    content: Text("delete this product?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          productController.deleteProduct();
+                          Get.back();
+                          Get.back();
+                        },
+                        child: Text("Delete"),
+                      ),
+                    ],
+                  );
                 },
                 icon: Icon(Icons.delete)),
             IconButton(
