@@ -20,6 +20,7 @@ class StockManager extends StatelessWidget {
   Widget build(BuildContext context) {
    
     return GetMaterialApp(
+      
       home: HomePage(),
     );
   }
