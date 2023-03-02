@@ -20,7 +20,7 @@ class ProductItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           productController.selectedProduct = product;
-          productController.getCategoryById();
+          productController.getCategoryById(product.categoryId);
           Get.to(ProductPage());
         },
         child: Padding(

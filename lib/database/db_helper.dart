@@ -54,8 +54,9 @@ class DBHelper {
           id INTEGER PRIMARY KEY,
           product_id INTEGER,
           datetime TEXT,
-          quantity INTEGER,
-          boxOrIndiv TEXT,
+          quantity_box INTEGER,
+          quantity_piece INTEGER,
+          
           FOREIGN KEY (product_id) REFERENCES products(id)
         )
       ''');
@@ -97,6 +98,21 @@ class DBHelper {
       whereArgs: [product.id],
     );
   }
+  Future<Product?> getProductById(int id) async {
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query(
+    'products',
+    where: 'id = ?',
+    whereArgs: [id],
+    limit: 1,
+  );
+
+  if (maps.isNotEmpty) {
+    return Product.fromMap(maps.first);
+  }
+  return null;
+}
+
 
   Future<int> deleteProduct(int id) async {
     final Database db = await _instance.database;

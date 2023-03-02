@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stock_manager/components/boxs_update.dart';
 import 'package:stock_manager/controller/product_controller.dart';
+import 'package:stock_manager/database/category.dart';
 import 'package:stock_manager/database/product.dart';
 import 'package:stock_manager/pages/add_product.dart';
+import 'package:stock_manager/pages/product_history_page.dart';
 import 'package:stock_manager/styles/colors.dart';
 import 'package:stock_manager/styles/text_style.dart';
 
@@ -19,7 +21,6 @@ class ProductPage extends StatelessWidget {
         productController.selectedProduct!.numPiecesPerBox;
     return SafeArea(
       child: Scaffold(
-        
         bottomNavigationBar: MaterialButton(
           height: 50,
           onPressed: () {
@@ -42,6 +43,12 @@ class ProductPage extends StatelessWidget {
                   Get.back();
                 },
                 icon: Icon(Icons.delete)),
+            IconButton(
+                onPressed: () {
+                  productController.getProductHistories();
+                  Get.to(ProductHistoryPage());
+                },
+                icon: Icon(Icons.history)),
           ],
         ),
         body: Padding(
@@ -65,10 +72,22 @@ class ProductPage extends StatelessWidget {
                   style: kSubheadingTextStyle,
                 ),
                 SizedBox(height: 8.0),
-                Text(
-                  '${productController.productCategory!.name}',
-                  style: TextStyle(fontSize: 18.0),
-                ),
+                FutureBuilder<Category?>(
+                    future: productController.getCategoryById(
+                        productController.selectedProduct!.categoryId),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<Category?> snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data!.name,
+                          style: TextStyle(fontSize: 18),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    }),
                 SizedBox(height: 16.0),
                 Text(
                   'Pieces Per Box',

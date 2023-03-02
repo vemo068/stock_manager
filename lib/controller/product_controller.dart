@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stock_manager/database/category.dart';
 import 'package:stock_manager/database/db_helper.dart';
+import 'package:stock_manager/database/history.dart';
 import 'package:stock_manager/database/product.dart';
 
 class ProductController extends GetxController {
@@ -14,6 +15,8 @@ class ProductController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController piecesPerBoxController = TextEditingController();
+  List<History> productHistories = [];
+  List<History> allHistories = [];
 
   void filteredProducts() async {
     final query = searchController.text.toLowerCase();
@@ -25,6 +28,21 @@ class ProductController extends GetxController {
   void onInit() {
     super.onInit();
     loadCategories();
+  }
+
+  Future<Product?> getProductById(int id) async {
+    return await dbHelper.getProductById(id);
+  }
+
+  void getAllHistories() async {
+    allHistories = await dbHelper.getAllHistories();
+    update();
+  }
+
+  void getProductHistories() async {
+    productHistories =
+        await dbHelper.getHistoriesByProductId(selectedProduct!.id!);
+    update();
   }
 
   void addProduct() async {
@@ -45,6 +63,12 @@ class ProductController extends GetxController {
     product.numIndividualPieces += boxsConter * product.numPiecesPerBox;
     product.numIndividualPieces += piecesConter;
     await dbHelper.updateProduct(product);
+    History history = History(
+        productId: product.id!,
+        quantityBox: boxsConter,
+        quantityPiece: piecesConter,
+        dateTime: DateTime.now());
+    await dbHelper.createHistory(history);
     boxsConter = 0;
     piecesConter = 0;
     loadProducts();
@@ -105,7 +129,8 @@ class ProductController extends GetxController {
     update();
   }
 
-  void getCategoryById() async {
-    productCategory = await dbHelper.getCategoryById(selectedProduct!.categoryId);
+  Future<Category?> getCategoryById(int id) async {
+    return
+        await dbHelper.getCategoryById(id);
   }
 }

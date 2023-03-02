@@ -4,6 +4,7 @@ import 'package:stock_manager/components/boxs_update.dart';
 import 'package:stock_manager/controller/product_controller.dart';
 import 'package:stock_manager/pages/add_category.dart';
 import 'package:stock_manager/pages/all_products_page.dart';
+import 'package:stock_manager/pages/history_page.dart';
 import 'package:stock_manager/pages/homepage.dart';
 import 'package:stock_manager/styles/text_style.dart';
 
@@ -48,7 +49,14 @@ class MyDrawer extends StatelessWidget {
               Get.to(AddCategoryPage());
             },
           ),
-         
+          ListTile(
+            leading: Icon(Icons.history),
+            title: Text('History'),
+            onTap: () {
+              productController.getAllHistories();
+              Get.offAll(AllHistoryPage());
+            },
+          ),
         ],
       ),
     );
