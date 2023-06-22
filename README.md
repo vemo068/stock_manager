@@ -16,7 +16,7 @@ The Inventory Mobile App is developed using the following technologies:
 The Spoket Mobile App offers the following features:
 
 1. Home Page
-   - ![Home Page](rd_images/home.png =400*700)
+   - ![Home Page](rd_images/home.png)
    - Displays a list of product categories.
    - Each category is represented by Card with its name.
    - Users can tap on a category to view the products within that category.
