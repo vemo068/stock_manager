@@ -16,7 +16,7 @@ The Inventory Mobile App is developed using the following technologies:
 The Spoket Mobile App offers the following features:
 
 1. Home Page
-   - ![Home Page](rd_images/home.png)
+   - ![Home Page](rd_images/home.png =400*700)
    - Displays a list of product categories.
    - Each category is represented by Card with its name.
    - Users can tap on a category to view the products within that category.
@@ -56,7 +56,7 @@ The Spoket Mobile App offers the following features:
 To install and run the Inventory Mobile App locally, follow these steps:
 
 1. Clone the repository: `git clone <repository-url>`
-2. Navigate to the project directory: `cd inventory-mobile-app`
+2. Navigate to the project directory: `cd stock_manager`
 3. Install dependencies: `flutter pub get`
 4. Run the app on a connected device or emulator: `flutter run`
 
